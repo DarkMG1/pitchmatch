@@ -1,6 +1,8 @@
 from pymongo import MongoClient
+import os
+from dotenv import load_dotenv
 
-def connect_and_read_mongodb(connection_string, database_name, collection_name):
+def connect_and_read_mongodb():
     """
     Connects to a MongoDB database, reads data from a specified collection,
     and prints the retrieved documents.
@@ -16,22 +18,28 @@ def connect_and_read_mongodb(connection_string, database_name, collection_name):
     """
     try:
         # 1. Establish a connection to MongoDB
-        client = MongoClient(connection_string)
+        load_dotenv("mongo.env")
+        username= os.getenv('MONGO_USERNAME')
+        password= os.getenv('MONGO_PASSWORD')
+
+        client = MongoClient(f"mongodb+srv://{username}:{password}@pitchmatch.ehi9k.mongodb.net/?retryWrites=true&w=majority&appName=pitchmatch")
 
         # 2. Access the specified database
-        db = client[database_name]
+        db = client["pitchmatch"]
 
         # 3. Access the specified collection
-        collection = db[collection_name]
+        collection = db["sample_mflix.movies"]
 
         # 4. Read data from the collection (example: find all documents)
         documents = collection.find()  # You can add query criteria here if needed (e.g., collection.find({"name": "John"}))
-
+        lists = list(documents)
+        print(documents)
+        print(lists)
         # 5. Process and print the retrieved documents
         for document in documents:
             print(document)  # Print each document (you can customize this)
 
-        print(f"Successfully read data from collection '{collection_name}' in database '{database_name}'.")
+        print(f"Successfully read data from collection 'sample_mflix.comments' in database 'pitchmatch'.")
 
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -44,12 +52,8 @@ def connect_and_read_mongodb(connection_string, database_name, collection_name):
 
 # --- Example Usage ---
 if __name__ == "__main__":
-    # *** IMPORTANT: Replace with your actual MongoDB connection string, database, and collection names ***
-    connection_string = "mongodb://your_username:your_password@your_host:your_port/"  # Example, replace with your credentials
-    database_name = "your_database_name"
-    collection_name = "your_collection_name"
 
-    connect_and_read_mongodb(connection_string, database_name, collection_name)
+    connect_and_read_mongodb()
 
 
     # Example 2: Using a connection string with SRV record (for MongoDB Atlas)
