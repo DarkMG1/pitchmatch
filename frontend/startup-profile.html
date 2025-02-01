@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Startup Profile - PitchMatch</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header>
+      <h1>Create Your Startup Profile</h1>
+      <p>Attract investors who align with your vision.</p>
+    </header>
+
+    <!-- Startup Profile Form -->
+    <form id="startup-profile-form" class="profile-form">
+      <label for="desired-fund">Desired Fund ($):</label>
+      <input type="number" id="desired-fund" name="desired-fund" required>
+
+      <label for="equity-offered">Equity Offered (%):</label>
+      <input type="number" id="equity-offered" name="equity-offered" min="0" max="100" required>
+
+      <label for="pitch-deck">Pitch Deck (URL):</label>
+      <input type="url" id="pitch-deck" name="pitch-deck" placeholder="e.g., https://example.com/pitch-deck" required>
+
+      <label for="financials">Financials (URL):</label>
+      <input type="url" id="financials" name="financials" placeholder="e.g., https://example.com/financials" required>
+
+      <label for="certifications">Certifications:</label>
+      <textarea id="certifications" name="certifications" placeholder="List any relevant certifications"></textarea>
+
+      <label for="location">Location:</label>
+      <input type="text" id="location" name="location" placeholder="e.g., San Francisco, CA" required>
+  
+      <label for="tags">Tag Words (comma-separated):</label>
+      <input type="text" id="tags" name="tags" placeholder="e.g., AI, SaaS, Blockchain" required>
+      
+      <button type="submit">Save Profile</button>
+    </form>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2025 PitchMatch. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
