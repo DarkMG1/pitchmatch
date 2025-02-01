@@ -1,0 +1,20 @@
+[
+    {
+      "id": 1,
+      "name": "Startup A",
+      "description": "Revolutionizing AI in healthcare.",
+      "image": "assets/startup1.jpg"
+    },
+    {
+      "id": 2,
+      "name": "Investor X",
+      "description": "Focuses on early-stage tech startups.",
+      "image": "assets/investor1.jpg"
+    },
+    {
+      "id": 3,
+      "name": "Startup B",
+      "description": "Sustainable energy solutions for the future.",
+      "image": "assets/startup2.jpg"
+    }
+  ]
