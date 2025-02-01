@@ -63,6 +63,82 @@ const profiles = [
       }, 300);
     }
   });
-  
+
   // Load the first card
   loadNextCard();
+  
+  // VC Profile Form Submission
+  document.getElementById("vc-profile-form")?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const vcProfile = Object.fromEntries(formData.entries());
+    console.log("VC Profile:", vcProfile);
+    alert("VC Profile Saved!");
+    e.target.reset();
+  });
+
+  // Startup Profile Form Submission
+  document.getElementById("startup-profile-form")?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const startupProfile = Object.fromEntries(formData.entries());
+    console.log("Startup Profile:", startupProfile);
+    alert("Startup Profile Saved!");
+    e.target.reset();
+  });
+
+  // Smooth scrolling for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      document.querySelector(this.getAttribute('href')).scrollIntoView({
+        behavior: 'smooth'
+      });
+    });
+  });
+
+  // Login Form Submission
+document.getElementById("login-form")?.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  // Basic validation
+  if (!email || !password) {
+    alert("Please fill in all fields.");
+    return;
+  }
+
+  // Simulate login (replace with actual API call)
+  console.log("Login Data:", { email, password });
+  alert("Login successful! Redirecting to dashboard...");
+
+  // Redirect to dashboard or home page
+  window.location.href = "index.html";
+});
+
+// Signup Form Submission
+document.getElementById("signup-form")?.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const role = document.getElementById("role").value;
+
+  // Basic validation
+  if (!name || !email || !password || !role) {
+    alert("Please fill in all fields.");
+    return;
+  }
+
+  // Simulate signup (replace with actual API call)
+  console.log("Signup Data:", { name, email, password, role });
+  alert("Signup successful! Redirecting to profile creation...");
+
+  // Redirect based on role
+  if (role === "vc") {
+    window.location.href = "vc-profile.html";
+  } else if (role === "startup") {
+    window.location.href = "startup-profile.html";
+  }
+});
