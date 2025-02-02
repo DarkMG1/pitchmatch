@@ -134,7 +134,7 @@ def read_login(login_json):
 if __name__ == "__main__":
 
     write_login({
-        "email": "test_login",
+        "email": "test_login@gmail.com",
         "password": utils.hash_password("test_password")})
 
     write_vc({
