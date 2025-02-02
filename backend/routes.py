@@ -56,7 +56,7 @@ def create_vc_profile():
     industry = data.get("industry")
     business_size = data.get("business_size")
     equity = data.get("equity")
-    location = data.get("location")
+    vc_location = data.get("location")
     certifications = data.get("certifications")
     tags = data.get("tags")
 
@@ -71,9 +71,8 @@ def create_vc_profile():
         "industry": industry,
         "business_size": business_size,
         "equity": equity,
-        "location": location,
+        "location": vc_location,
         "certifications": certifications,
-        "tags": tags,
     }
     database.write_vc(profile)
 
@@ -87,6 +86,7 @@ def create_startup_profile():
     desired_fund = data.get("desired_fund")
     equity_offered = data.get("equity_offered")
     pitch_deck = data.get("pitch_deck")
+    sb_location = data.get("location")
     financials = data.get("financials")
     certifications = data.get("certifications")
 
@@ -101,6 +101,7 @@ def create_startup_profile():
         "equity_offered": equity_offered,
         "pitch_deck": pitch_deck,
         "financials": financials,
+        "location": sb_location,
         "certifications": certifications,
     }
     database.write_startup(profile)
