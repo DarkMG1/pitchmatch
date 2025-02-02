@@ -45,12 +45,12 @@ def login():
 
     # Find user in database
     user = database.read_login({"email": email})
+    print(user)
     if not user or not utils.verify_password(password, user["password"]):
         return jsonify({"error": "Invalid email or password"}), 401
 
     return jsonify({"message": "Login successful"}), 200
 
-#Login: Requires email in the body of the request
 @api.route("/api/profile/vc", methods=["POST"])
 def create_vc_profile():
     data = request.json
