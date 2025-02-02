@@ -12,7 +12,7 @@
     <nav>
       <div class="navbar">
         <div class="logo">
-          <img src="assets/logo.png" alt="PitchMatch Logo">
+          <img src="../frontend/PitchMatch.png">
           <h1>PitchMatch</h1>
         </div>
         <div class="nav-links">
@@ -54,6 +54,45 @@
       <p>&copy; 2025 PitchMatch. All rights reserved.</p>
     </footer>
   </div>
+
+  <script>
+    async function signup(event) {
+      event.preventDefault(); // Prevent page refresh
+
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const role = document.getElementById('role').value;
+
+      try {
+        const response = await fetch('/api/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password, role })
+        });
+
+        if (!response.ok) {
+          throw new Error(`Signup failed: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Signup successful", data);
+
+        // Store user data (optional)
+        localStorage.setItem('user', JSON.stringify(data));
+
+        // Redirect to login page
+        window.location.href = "login.html";
+
+      } catch (error) {
+        console.error("Signup error:", error);
+        alert("Signup failed. Please try again.");
+      }
+    }
+
+    // Attach event listener to form submission
+    document.getElementById('signup-form').addEventListener('submit', signup);
+  </script>
 
   <script src="app.js"></script>
 </body>
