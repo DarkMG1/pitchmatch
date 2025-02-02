@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, render_template
 import utils
 import database
+import math
 
 api = Blueprint("api", __name__)
 
@@ -58,7 +59,7 @@ def create_vc_profile():
     industry = data.get("industry")
     business_size = data.get("business_size")
     equity = data.get("equity")
-    location = data.get("location")
+    vc_location = data.get("location")
     certifications = data.get("certifications")
     tags = data.get("tags")
 
@@ -73,9 +74,8 @@ def create_vc_profile():
         "industry": industry,
         "business_size": business_size,
         "equity": equity,
-        "location": location,
+        "location": vc_location,
         "certifications": certifications,
-        "tags": tags,
     }
     database.write_vc(profile)
 
@@ -89,6 +89,7 @@ def create_startup_profile():
     desired_fund = data.get("desired_fund")
     equity_offered = data.get("equity_offered")
     pitch_deck = data.get("pitch_deck")
+    sb_location = data.get("location")
     financials = data.get("financials")
     certifications = data.get("certifications")
 
@@ -103,8 +104,27 @@ def create_startup_profile():
         "equity_offered": equity_offered,
         "pitch_deck": pitch_deck,
         "financials": financials,
+        "location": sb_location,
         "certifications": certifications,
     }
     database.write_startup(profile)
 
     return jsonify({"message": "Startup profile created successfully"}), 201
+
+@api.route("/api/matchmaking", methods=["POST"])
+def match_making_alg():
+    sb_data, vc_data = request.json
+    sb_id = sb_data.get("sb_user_id")
+    sb_fund = sb_data.get("sb_desired_fund")
+    sb_equity = sb_data.get("sb_equity_offered")
+    sb_location = sb_data.get("sb_location")
+    sb_industry = sb_data.get("sb_industry")
+    vc_fund = vc_data.get("vc_investment")
+    vc_equity = vc_data.get("vc_equity_desired")
+    vc_location = vc_data.get("vc_location")
+    vc_industry = vc_data.get("vc_industry")
+    vc_id = vc_data.get("vc_user_id")
+    if sb_industry == vc_industry:
+        if math.abs(sb_fund-vc_fund)/max(sb_fund,vc_fund) <= 0.2:
+            if sb_location == vc_location or math.abs(sb_equity-vc_equity)/max(sb_equity,vc_equity) <= 0.2:
+                return jsonify({"message": f"Match has been made between {vc_id} and {sb_id}"})
