@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify
-from models import users_collection, profiles_collection
-from utils import hash_password, verify_password, decode_token, generate_token
-from functools import wraps
+import utils
+import database
 
 api = Blueprint("api", __name__)
 
@@ -17,11 +16,11 @@ def signup():
         return jsonify({"error": "All fields are required"}), 400
 
     # Check if user already exists
-    if users_collection.find_one({"email": email}):
+    if database.read_login({"email": email}):
         return jsonify({"error": "User already exists"}), 400
 
     # Hash password
-    hashed_password = hash_password(password)
+    hashed_password = utils.hash_password(password)
 
     # Save user to database
     user = {
@@ -30,7 +29,7 @@ def signup():
         "password": hashed_password,
         "role": role,
     }
-    users_collection.insert_one(user)
+    database.write_login(user)
 
     return jsonify({"message": "User registered successfully"}), 201
 
@@ -44,20 +43,15 @@ def login():
         return jsonify({"error": "Email and password are required"}), 400
 
     # Find user in database
-    user = users_collection.find_one({"email": email})
-    if not user or not verify_password(password, user["password"]):
+    user = database.read_login({"email": email})
+    if not user or not utils.verify_password(password, user["password"]):
         return jsonify({"error": "Invalid email or password"}), 401
 
-    # Generate JWT
-    token = generate_token(str(user["_id"]), user["role"])
-
-    return jsonify({"message": "Login successful", "token": token}), 200
-
+#Login: Requires email in the body of the request
 @api.route("/profile/vc", methods=["POST"])
-@login_required
 def create_vc_profile():
     data = request.json
-    user_id = request.user_id  # Get user ID from the token
+    user_id = data.email  # Get user ID from the token
     budget = data.get("budget")
     industry = data.get("industry")
     business_size = data.get("business_size")
@@ -81,15 +75,15 @@ def create_vc_profile():
         "certifications": certifications,
         "tags": tags,
     }
-    profiles_collection.insert_one(profile)
+    database.write_vc(profile)
 
     return jsonify({"message": "VC profile created successfully"}), 201
 
+#Login: Requires email in the body of the request
 @api.route("/profile/startup", methods=["POST"])
-# @login_required
 def create_startup_profile():
     data = request.json
-    user_id = request.user_id  # Get user ID from the token
+    user_id = data.email # Get user ID from the token
     desired_fund = data.get("desired_fund")
     equity_offered = data.get("equity_offered")
     pitch_deck = data.get("pitch_deck")
@@ -109,52 +103,6 @@ def create_startup_profile():
         "financials": financials,
         "certifications": certifications,
     }
-    profiles_collection.insert_one(profile)
+    database.write_startup(profile)
 
     return jsonify({"message": "Startup profile created successfully"}), 201
-
-@api.route("/profile/startup", methods=["POST"])
-def create_startup_profile():
-    data = request.json
-    user_id = data.get("user_id")
-    desired_fund = data.get("desired_fund")
-    equity_offered = data.get("equity_offered")
-    pitch_deck = data.get("pitch_deck")
-    financials = data.get("financials")
-    certifications = data.get("certifications")
-
-    if not user_id or not desired_fund or not equity_offered or not pitch_deck or not financials:
-        return jsonify({"error": "All fields are required"}), 400
-
-    # Save Startup profile to database
-    profile = {
-        "user_id": user_id,
-        "type": "startup",
-        "desired_fund": desired_fund,
-        "equity_offered": equity_offered,
-        "pitch_deck": pitch_deck,
-        "financials": financials,
-        "certifications": certifications,
-    }
-    profiles_collection.insert_one(profile)
-
-    return jsonify({"message": "Startup profile created successfully"}), 201
-
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        token = request.headers.get("Authorization")
-        if not token:
-            return jsonify({"error": "Authorization token is missing"}), 401
-
-        # Decode and verify token
-        payload = decode_token(token)
-        if not payload:
-            return jsonify({"error": "Invalid or expired token"}), 401
-
-        # Attach user ID and role to the request
-        request.user_id = payload["user_id"]
-        request.role = payload["role"]
-
-        return f(*args, **kwargs)
-    return decorated_function
