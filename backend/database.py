@@ -1,21 +1,10 @@
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
+from backend import utils
 
-def connect_and_read_mongodb():
-    """
-    Connects to a MongoDB database, reads data from a specified collection,
-    and prints the retrieved documents.
 
-    Args:
-        connection_string: The connection string for the MongoDB server.
-                           (e.g., "mongodb://username:password@host:port/")
-        database_name: The name of the database to connect to.
-        collection_name: The name of the collection to read from.
-
-    Returns:
-        None. Prints the retrieved documents to the console.  Or raises an exception if there is an error.
-    """
+def write_vc(vs_in_json):
     try:
         # 1. Establish a connection to MongoDB
         load_dotenv("mongo.env")
@@ -23,42 +12,144 @@ def connect_and_read_mongodb():
         password= os.getenv('MONGO_PASSWORD')
 
         client = MongoClient(f"mongodb+srv://{username}:{password}@pitchmatch.ehi9k.mongodb.net/?retryWrites=true&w=majority&appName=pitchmatch")
-
-        # 2. Access the specified database
         db = client["pitchmatch"]
+        collection = db["vc_info"]
 
-        # 3. Access the specified collection
-        collection = db["sample_mflix.movies"]
-
-        # 4. Read data from the collection (example: find all documents)
-        documents = collection.find()  # You can add query criteria here if needed (e.g., collection.find({"name": "John"}))
-        lists = list(documents)
-        print(documents)
-        print(lists)
-        # 5. Process and print the retrieved documents
-        for document in documents:
-            print(document)  # Print each document (you can customize this)
-
-        print(f"Successfully read data from collection 'sample_mflix.comments' in database 'pitchmatch'.")
+        collection.insert_one(vs_in_json)
+        print(f"Successfully inserted data into collection 'pitchmatch.vc_info' in database 'pitchmatch'.")
 
     except Exception as e:
         print(f"An error occurred: {e}")
 
     finally:
         if 'client' in locals() and client:  # Ensure client is defined and not None
-            client.close()  # Close the connection in the finally block to ensure it always closes
+            client.close()
+
+def write_startup(startup_in_json):
+    try:
+        # 1. Establish a connection to MongoDB
+        load_dotenv("mongo.env")
+        username= os.getenv('MONGO_USERNAME')
+        password= os.getenv('MONGO_PASSWORD')
+
+        client = MongoClient(f"mongodb+srv://{username}:{password}@pitchmatch.ehi9k.mongodb.net/?retryWrites=true&w=majority&appName=pitchmatch")
+        db = client["pitchmatch"]
+        collection = db["startup_info"]
+
+        collection.insert_one(startup_in_json)
+        print(f"Successfully inserted data into collection 'pitchmatch.startup_info' in database 'pitchmatch'.")
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+    finally:
+        if 'client' in locals() and client:  # Ensure client is defined and not None
+            client.close()
+
+def read_startup(input_json):
+    try:
+        # 1. Establish a connection to MongoDB
+        load_dotenv("mongo.env")
+        username= os.getenv('MONGO_USERNAME')
+        password= os.getenv('MONGO_PASSWORD')
+
+        client = MongoClient(f"mongodb+srv://{username}:{password}@pitchmatch.ehi9k.mongodb.net/?retryWrites=true&w=majority&appName=pitchmatch")
+        db = client["pitchmatch"]
+        collection = db["startup_info"]
+
+        # 2. Read data from MongoDB
+        cursor = collection.find(input_json)
+        documents = list(cursor)
+        return documents
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+    finally:
+        if 'client' in locals() and client:  # Ensure client is defined and not None
+            client.close()
 
 
+def read_vc(vc_json):
+    try:
+        # 1. Establish a connection to MongoDB
+        load_dotenv("mongo.env")
+        username = os.getenv('MONGO_USERNAME')
+        password = os.getenv('MONGO_PASSWORD')
+
+        client = MongoClient(f"mongodb+srv://{username}:{password}@pitchmatch.ehi9k.mongodb.net/?retryWrites=true&w=majority&appName=pitchmatch")
+        db = client["pitchmatch"]
+        collection = db["vc_info"]
+
+        # 2. Read data from MongoDB
+        cursor = collection.find(vc_json)
+        documents = list(cursor)
+        return documents
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+    finally:
+        if 'client' in locals() and client:  # Ensure client is defined and not None
+            client.close()
+
+def write_login(login_json):
+    try:
+        # 1. Establish a connection to MongoDB
+        load_dotenv("mongo.env")
+        username= os.getenv('MONGO_USERNAME')
+        password= os.getenv('MONGO_PASSWORD')
+
+        client = MongoClient(f"mongodb+srv://{username}:{password}@pitchmatch.ehi9k.mongodb.net/?retryWrites=true&w=majority&appName=pitchmatch")
+        db = client["pitchmatch"]
+        collection = db["login_info"]
+
+        collection.insert_one(login_json)
+        print(f"Successfully inserted data into collection 'pitchmatch.login_info' in database 'pitchmatch'.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    finally:
+        if 'client' in locals() and client:
+            client.close()
+
+def read_login(login_json):
+    try:
+        # 1. Establish a connection to MongoDB
+        load_dotenv("mongo.env")
+        username= os.getenv('MONGO_USERNAME')
+        password= os.getenv('MONGO_PASSWORD')
+
+        client = MongoClient(f"mongodb+srv://{username}:{password}@pitchmatch.ehi9k.mongodb.net/?retryWrites=true&w=majority&appName=pitchmatch")
+        db = client["pitchmatch"]
+        collection = db["login_info"]
+
+        cursor = collection.find(login_json)
+        documents = list(cursor)
+        return documents
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    finally:
+        if 'client' in locals() and client:
+            client.close()
 
 # --- Example Usage ---
 if __name__ == "__main__":
 
-    connect_and_read_mongodb()
+    write_login({
+        "email": "test_login",
+        "password": utils.hash_password("test_password")})
 
+    write_vc({
+        "vc_name": "test_vc",
+        "vc_email": "test@test.com"})
 
-    # Example 2: Using a connection string with SRV record (for MongoDB Atlas)
-    # connection_string = "mongodb+srv://your_username:your_password@your_cluster_name.mongodb.net/?retryWrites=true&w=majority"
-    # database_name = "your_database_name"
-    # collection_name = "your_collection_name"
+    write_startup({
+        "startup_name": "test_startup",
+        "startup_email": "test@startup.com"})
 
-    # connect_and_read_mongodb(connection_string, database_name, collection_name)
+    print(read_vc({
+        "vc_name": "test_vc"}))
+
+    print(read_startup({
+        "startup_name": "test_startup"}))
+
+    print(read_login({
+        "email": "test_login"}))
