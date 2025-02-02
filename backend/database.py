@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
-from backend import utils
+import utils
 
 
 def write_vc(vs_in_json):
@@ -11,7 +11,7 @@ def write_vc(vs_in_json):
         username= os.getenv('MONGO_USERNAME')
         password= os.getenv('MONGO_PASSWORD')
 
-        client = MongoClient(f"mongodb+srv://{username}:{password}@pitchmatch.ehi9k.mongodb.net/?retryWrites=true&w=majority&appName=pitchmatch")
+        client = MongoClient(f"mongodb+srv://asarada:nJnwDvzQzjQnrCaG@pitchmatch.ehi9k.mongodb.net/?retryWrites=true&w=majority&appName=pitchmatch")
         db = client["pitchmatch"]
         collection = db["vc_info"]
 
@@ -32,7 +32,7 @@ def write_startup(startup_in_json):
         username= os.getenv('MONGO_USERNAME')
         password= os.getenv('MONGO_PASSWORD')
 
-        client = MongoClient(f"mongodb+srv://{username}:{password}@pitchmatch.ehi9k.mongodb.net/?retryWrites=true&w=majority&appName=pitchmatch")
+        client = MongoClient(f"mongodb+srv://asarada:nJnwDvzQzjQnrCaG@pitchmatch.ehi9k.mongodb.net/?retryWrites=true&w=majority&appName=pitchmatch")
         db = client["pitchmatch"]
         collection = db["startup_info"]
 
@@ -53,7 +53,7 @@ def read_startup(input_json):
         username= os.getenv('MONGO_USERNAME')
         password= os.getenv('MONGO_PASSWORD')
 
-        client = MongoClient(f"mongodb+srv://{username}:{password}@pitchmatch.ehi9k.mongodb.net/?retryWrites=true&w=majority&appName=pitchmatch")
+        client = MongoClient(f"mongodb+srv://asarada:nJnwDvzQzjQnrCaG@pitchmatch.ehi9k.mongodb.net/?retryWrites=true&w=majority&appName=pitchmatch")
         db = client["pitchmatch"]
         collection = db["startup_info"]
 
@@ -76,7 +76,7 @@ def read_vc(vc_json):
         username = os.getenv('MONGO_USERNAME')
         password = os.getenv('MONGO_PASSWORD')
 
-        client = MongoClient(f"mongodb+srv://{username}:{password}@pitchmatch.ehi9k.mongodb.net/?retryWrites=true&w=majority&appName=pitchmatch")
+        client = MongoClient(f"mongodb+srv://asarada:nJnwDvzQzjQnrCaG@pitchmatch.ehi9k.mongodb.net/?retryWrites=true&w=majority&appName=pitchmatch")
         db = client["pitchmatch"]
         collection = db["vc_info"]
 
@@ -98,7 +98,7 @@ def write_login(login_json):
         username= os.getenv('MONGO_USERNAME')
         password= os.getenv('MONGO_PASSWORD')
 
-        client = MongoClient(f"mongodb+srv://{username}:{password}@pitchmatch.ehi9k.mongodb.net/?retryWrites=true&w=majority&appName=pitchmatch")
+        client = MongoClient(f"mongodb+srv://asarada:nJnwDvzQzjQnrCaG@pitchmatch.ehi9k.mongodb.net/?retryWrites=true&w=majority&appName=pitchmatch")
         db = client["pitchmatch"]
         collection = db["login_info"]
 
@@ -117,7 +117,7 @@ def read_login(login_json):
         username= os.getenv('MONGO_USERNAME')
         password= os.getenv('MONGO_PASSWORD')
 
-        client = MongoClient(f"mongodb+srv://{username}:{password}@pitchmatch.ehi9k.mongodb.net/?retryWrites=true&w=majority&appName=pitchmatch")
+        client = MongoClient(f"mongodb+srv://asarada:nJnwDvzQzjQnrCaG@pitchmatch.ehi9k.mongodb.net/?retryWrites=true&w=majority&appName=pitchmatch")
         db = client["pitchmatch"]
         collection = db["login_info"]
 
