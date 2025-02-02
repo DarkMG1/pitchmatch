@@ -68,14 +68,44 @@ const profiles = [
   loadNextCard();
   
   // VC Profile Form Submission
-  document.getElementById("vc-profile-form")?.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const vcProfile = Object.fromEntries(formData.entries());
-    console.log("VC Profile:", vcProfile);
-    alert("VC Profile Saved!");
-    e.target.reset();
-  });
+// Example: Create VC Profile
+document.getElementById("vc-profile-form")?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const token = localStorage.getItem("token");  // Get token from localStorage
+  if (!token) {
+    alert("You must be logged in to create a profile.");
+    return;
+  }
+
+  const budget = document.getElementById("budget").value;
+  const industry = document.getElementById("industry").value;
+  const businessSize = document.getElementById("business-size").value;
+  const equity = document.getElementById("equity").value;
+  const location = document.getElementById("location").value;
+  const certifications = document.getElementById("certifications").value;
+  const tags = document.getElementById("tags").value;
+
+  try {
+    const response = await fetch("http://localhost:5000/profile/vc", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": token,  // Include token in headers
+      },
+      body: JSON.stringify({ budget, industry, business_size: businessSize, equity, location, certifications, tags }),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      alert(data.message);
+    } else {
+      alert(data.error);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    alert("An error occurred. Please try again.");
+  }
+});
 
   // Startup Profile Form Submission
   document.getElementById("startup-profile-form")?.addEventListener("submit", (e) => {
@@ -97,48 +127,71 @@ const profiles = [
     });
   });
 
-  // Login Form Submission
-document.getElementById("login-form")?.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  // Basic validation
-  if (!email || !password) {
-    alert("Please fill in all fields.");
-    return;
-  }
-
-  // Simulate login (replace with actual API call)
-  console.log("Login Data:", { email, password });
-  alert("Login successful! Redirecting to dashboard...");
-
-  // Redirect to dashboard or home page
-  window.location.href = "index.html";
-});
-
 // Signup Form Submission
-document.getElementById("signup-form")?.addEventListener("submit", (e) => {
+document.getElementById("signup-form")?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const name = document.getElementById("name").value;
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   const role = document.getElementById("role").value;
 
-  // Basic validation
   if (!name || !email || !password || !role) {
     alert("Please fill in all fields.");
     return;
   }
 
-  // Simulate signup (replace with actual API call)
-  console.log("Signup Data:", { name, email, password, role });
-  alert("Signup successful! Redirecting to profile creation...");
+  try {
+    const response = await fetch("http://localhost:5000/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, email, password, role }),
+    });
 
-  // Redirect based on role
-  if (role === "vc") {
-    window.location.href = "vc-profile.html";
-  } else if (role === "startup") {
-    window.location.href = "startup-profile.html";
+    const data = await response.json();
+    if (response.ok) {
+      alert(data.message);
+      window.location.href = role === "vc" ? "vc-profile.html" : "startup-profile.html";
+    } else {
+      alert(data.error);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    alert("An error occurred. Please try again.");
+  }
+});
+
+// Login Form Submission
+document.getElementById("login-form")?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  if (!email || !password) {
+    alert("Email and password are required.");
+    return;
+  }
+
+  try {
+    const response = await fetch("http://localhost:5000/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      alert(data.message);
+      localStorage.setItem("token", data.token);  // Save token to localStorage
+      window.location.href = "index.html";  // Redirect to home page
+    } else {
+      alert(data.error);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    alert("An error occurred. Please try again.");
   }
 });

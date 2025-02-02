@@ -59,21 +59,84 @@
       </div>
     </div>
   </section>
-
-  <!-- Testimonials Section -->
+  
   <section id="testimonials" class="testimonials">
     <h2>What Our Users Say</h2>
-    <div class="testimonial-cards">
-      <div class="card">
-        <p>"PitchMatch helped me find the perfect investor for my startup. Highly recommended!"</p>
-        <p class="author">- Jane Doe, Founder of TechNova</p>
-      </div>
-      <div class="card">
-        <p>"As an investor, PitchMatch made it easy to discover promising startups."</p>
-        <p class="author">- John Smith, Venture Capitalist</p>
-      </div>
+    <div class="testimonial-container">
+        <div class="testimonial-cards">
+            <article class="card">
+                <blockquote>
+                    <p>"PitchMatch helped me find the perfect investor!"</p>
+                </blockquote>
+                <p class="author">— Jane Doe, Founder of TechNova</p>
+            </article>
+            <article class="card">
+                <blockquote>
+                    <p>"As an investor, PitchMatch made discovering startups easy!"</p>
+                </blockquote>
+                <p class="author">— John Smith, Venture Capitalist</p>
+            </article>
+        </div>
     </div>
-  </section>
+</section>
+
+<style>
+    .testimonials {
+        text-align: center;
+        padding: 300px 700px;
+    }
+
+    .testimonial-container {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .testimonial-cards {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .card {
+        background: #f9f9f9;
+        padding: 10px;
+        border-radius: 6px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        max-width: 200px; 
+        text-align: left;
+        flex: 0 1 200px;
+        height: auto; 
+        position: relative;
+        display: inline-block;
+    }
+
+    blockquote {
+        margin: 0;
+        font-style: italic;
+        font-size: 14px; 
+    }
+
+    .author {
+        margin-top: 5px;
+        font-weight: bold;
+        font-size: 12px; 
+    }
+
+    @media (max-width: 450px) {
+        .testimonial-cards {
+            flex-direction: column;
+            align-items: center;
+            display: inline-block;
+        }
+
+        .card {
+            max-width: 100%; 
+        }
+    }
+</style>
+
+
 
   <!-- Footer -->
   <footer>
