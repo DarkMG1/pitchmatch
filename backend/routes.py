@@ -1,10 +1,10 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, render_template
 import utils
 import database
 
 api = Blueprint("api", __name__)
 
-@api.route("/signup", methods=["POST"])
+@api.route("/api/signup", methods=["POST"])
 def signup():
     data = request.json
     name = data.get("name")
@@ -33,7 +33,7 @@ def signup():
 
     return jsonify({"message": "User registered successfully"}), 201
 
-@api.route("/login", methods=["POST"])
+@api.route("/api/login", methods=["POST"])
 def login():
     data = request.json
     email = data.get("email")
@@ -48,7 +48,7 @@ def login():
         return jsonify({"error": "Invalid email or password"}), 401
 
 #Login: Requires email in the body of the request
-@api.route("/profile/vc", methods=["POST"])
+@api.route("/api/profile/vc", methods=["POST"])
 def create_vc_profile():
     data = request.json
     user_id = data.email  # Get user ID from the token
@@ -80,7 +80,7 @@ def create_vc_profile():
     return jsonify({"message": "VC profile created successfully"}), 201
 
 #Login: Requires email in the body of the request
-@api.route("/profile/startup", methods=["POST"])
+@api.route("/api/profile/startup", methods=["POST"])
 def create_startup_profile():
     data = request.json
     user_id = data.email # Get user ID from the token
