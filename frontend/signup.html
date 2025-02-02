@@ -1,45 +1,60 @@
-<script>
-  async function signup(event) {
-    event.preventDefault(); 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - PitchMatch</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <!-- Navbar -->
+    <nav>
+      <div class="navbar">
+        <div class="logo">
+          <img src="../frontend/PitchMatch.png">
+          <h1>PitchMatch</h1>
+        </div>
+        <div class="nav-links">
+          <a href="landing.html">Home</a>
+          <a href="login.html">Login</a>
+        </div>
+      </div>
+    </nav>
 
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
-    const role = document.getElementById('role').value;
+    <!-- Signup Form -->
+    <section class="signup-section">
+      <div class="signup-container">
+        <h2>Sign Up for PitchMatch</h2>
+        <form id="signup-form" class="auth-form">
+          <label for="name">Full Name:</label>
+          <input type="text" id="name" name="name" placeholder="Enter your full name" required>
 
-    if (!name || !email || !password || !role) {
-      alert("Please fill out all fields.");
-      return;
-    }
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" placeholder="Enter your email" required>
 
-    try {
-      const response = await fetch('/api/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password, role })
-      });
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" placeholder="Enter your password" required>
 
-      if (!response.ok) {
-        throw new Error(`Signup failed: ${response.status}`);
-      }
+          <label for="role">I am a:</label>
+          <select id="role" name="role" required>
+            <option value="">Select your role</option>
+            <option value="vc">Investor</option>
+            <option value="startup">Startup/Small Business</option>
+          </select>
 
-      const data = await response.json();
-      console.log("Signup successful", data);
+          <button type="submit" class="btn btn-primary">Sign Up</button>
+        </form>
+        <p>Already have an account? <a href="login.html">Login</a></p>
+      </div>
+    </section>
 
-      localStorage.setItem('user', JSON.stringify(data));
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2025 PitchMatch. All rights reserved.</p>
+    </footer>
+  </div>
 
-      window.location.href = "index.html";
-
-    } catch (error) {
-      console.error("Signup error:", error);
-      alert("Signup failed. Please try again.");
-    }
-  }
-
-  document.getElementById('signup-form').addEventListener('submit', signup);
-
-  document.querySelector(".signup-container a").addEventListener("click", function (event) {
-    event.preventDefault();
-    window.location.href = "login.html";
-  });
-</script>
+  <script src="app.js"></script>
+</body>
+</html>
